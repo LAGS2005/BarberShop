@@ -1,0 +1,156 @@
+import { Service, Barber, Booking, Review } from './types';
+
+export const mockServices: Service[] = [
+  {
+    id: '1',
+    name: 'Corte Clássico',
+    description: 'Corte de barbearia tradicional com degradê preciso e linhas limpas',
+    duration: 30,
+    price: 25,
+    category: 'haircut',
+  },
+  {
+    id: '2',
+    name: 'Barbear Quente',
+    description: 'Barbear tradicional com espuma quente e navalha reta',
+    duration: 25,
+    price: 20,
+    category: 'shave',
+  },
+  {
+    id: '3',
+    name: 'Aparação e Design de Barba',
+    description: 'Aparação profissional de barba com design detalhado',
+    duration: 20,
+    price: 18,
+    category: 'grooming',
+  },
+  {
+    id: '4',
+    name: 'Corte Degradê',
+    description: 'Degradê moderno com sua escolha de degradê alto, médio ou baixo',
+    duration: 35,
+    price: 30,
+    category: 'haircut',
+  },
+  {
+    id: '5',
+    name: 'Combo Corte + Barbear',
+    description: 'Pacote completo de grooming com corte e barbear quente',
+    duration: 50,
+    price: 40,
+    category: 'styling',
+  },
+  {
+    id: '6',
+    name: 'Grooming Premium',
+    description: 'Experiência completa de grooming com corte, barbear, design de barba e massagem',
+    duration: 60,
+    price: 55,
+    category: 'styling',
+  },
+];
+
+export const mockBarbers: Barber[] = [
+  {
+    id: '1',
+    name: 'Marcus Stone',
+    bio: 'Barbeiro principal com 15 anos de experiência. Mestre de cortes clássicos e modernos.',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
+    specialties: ['Degradê', 'Design de Barba', 'Cortes Clássicos'],
+    yearsExperience: 15,
+    rating: 4.9,
+  },
+  {
+    id: '2',
+    name: 'James Rivera',
+    bio: 'Especialista em estilos modernos e linework preciso. Seu goto para cortes em tendência.',
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
+    specialties: ['Estilos Modernos', 'Alinhamentos', 'Designs'],
+    yearsExperience: 10,
+    rating: 4.8,
+  },
+  {
+    id: '3',
+    name: 'David Chen',
+    bio: 'Mestre em barbear quente e arte de barba. Cria experiências lisas e confortáveis.',
+    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop',
+    specialties: ['Barbear Quente', 'Design de Barba', 'Massagem do Couro'],
+    yearsExperience: 12,
+    rating: 4.85,
+  },
+  {
+    id: '4',
+    name: 'Tommy Wright',
+    bio: 'Barbeiro júnior com energia fresca. Aprendiz rápido especializado em cortes limpos e frescos.',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
+    specialties: ['Cortes Frescos', 'Degradês Altos', 'Amigo do Cliente'],
+    yearsExperience: 3,
+    rating: 4.7,
+  },
+];
+
+export const mockBookings: Booking[] = [
+  {
+    id: '1',
+    userId: 'user1',
+    barberId: '1',
+    serviceId: '1',
+    date: '2024-03-15',
+    time: '10:00 AM',
+    status: 'completed',
+  },
+  {
+    id: '2',
+    userId: 'user1',
+    barberId: '2',
+    serviceId: '4',
+    date: '2024-03-08',
+    time: '2:00 PM',
+    status: 'completed',
+  },
+  {
+    id: '3',
+    userId: 'user1',
+    barberId: '1',
+    serviceId: '5',
+    date: '2024-03-22',
+    time: '11:00 AM',
+    status: 'confirmed',
+  },
+];
+
+export const mockReviews: Review[] = [
+  {
+    id: '1',
+    userId: 'user2',
+    userName: 'Alex Johnson',
+    rating: 5,
+    text: 'Serviço excepcional! Marcus me deu o melhor corte que já tive. Altamente recomendado!',
+    date: '2024-03-10',
+  },
+  {
+    id: '2',
+    userId: 'user3',
+    userName: 'Michael Brown',
+    rating: 5,
+    text: 'Barbeiros profissionais, atmosfera acolhedora e preços justos. Voltarei com certeza.',
+    date: '2024-03-08',
+  },
+  {
+    id: '3',
+    userId: 'user4',
+    userName: 'David Lee',
+    rating: 4,
+    text: 'Ótima experiência. James fez um trabalho incrível com meu degradê. O barbear quente foi o acabamento perfeito.',
+    date: '2024-03-05',
+  },
+  {
+    id: '4',
+    userId: 'user5',
+    userName: 'Chris Wilson',
+    rating: 5,
+    text: 'Barbearia Route 66 é a real. Experiência autêntica de barbearia com profissionais habilidosos.',
+    date: '2024-03-01',
+  },
+];

@@ -20,6 +20,7 @@ export default function HeroSection() {
                 Experimente o artesanato autêntico de barbearia com expertise moderna. Seu estilo, nossa paixão.
               </p>
             </div>
+          </div>
         </div>
       </Container>
     </section>

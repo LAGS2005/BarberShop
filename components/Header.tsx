@@ -10,10 +10,9 @@ export default function Header() {
   const navigation = [
     { name: 'Início', href: '/' },
     { name: 'Serviços', href: '/services' },
-    { name: 'Nossos Barbeiros', href: '/barbers' },
-    { name: 'Agendar', href: '/booking' },
-    { name: 'Minha Conta', href: '/account' },
+    { name: 'Barbeiros', href: '/barbers' },
     { name: 'Localização', href: '/location' },
+    { name: 'Minha Conta', href: '/account' },
   ];
 
   return (

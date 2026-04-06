@@ -18,6 +18,8 @@ export default function Home() {
         {/* Hero Section */}
         <HeroSection />
         
+        {/* Sobre nós */}
+
         {/* Testimonials */}
         <TestimonialsSection />
 

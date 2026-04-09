@@ -1,21 +1,29 @@
-import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import bcrypt from "bcryptjs";
 
 export async function POST(req: Request) {
-  const body = await req.json();
+  try {
+    const { email, password } = await req.json();
 
-  const { email, password } = body;
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
 
-  const user = await prisma.user.findUnique({
-    where: { email },
-  });
+    if (!user) {
+      return NextResponse.json({ error: "Usuário não encontrado" }, { status: 404 });
+    }
 
-  if (!user || user.password !== password) {
-    return NextResponse.json(
-      { error: "Credenciais inválidas" },
-      { status: 401 }
-    );
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return NextResponse.json({ error: "Senha inválida" }, { status: 401 });
+    }
+
+    return NextResponse.json({ message: "Login OK", user });
+
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "Erro no login" }, { status: 500 });
   }
-
-  return NextResponse.json(user);
 }

@@ -46,19 +46,23 @@ export default function AccountPage() {
 
   // HandleRegister - relacionado com a API de registro
   const handleRegister = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const res = await fetch("/api/register", {
-    method: "POST",
-    body: JSON.stringify(registerData),
-  });
+    const res = await fetch("/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(registerData),
+    });
 
-  if (res.ok) {
-    setIsLoggedIn(true);
-  } else {
-    alert("Erro ao criar conta");
-  }
-};
+    if (res.ok) {
+      setIsLoggedIn(true);
+      setRegisterData({ name: '', email: '', password: '', phone: '' });
+    } else {
+      alert("Erro ao criar conta");
+    }
+  };
 
   const handleLogout = () => {
     setIsLoggedIn(false);

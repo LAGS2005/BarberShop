@@ -168,6 +168,34 @@ export default function LocationPage() {
           </Container>
         </section>
 
+        {/* Parking & Accessibility */}
+        <section className="py-24 bg-secondary/5">
+          <Container>
+            <div className="flex flex-col gap-6 max-w-2xl mx-auto">
+              {[
+                {
+                  title: 'Estacionamento Gratuito',
+                  description: 'Amplo estacionamento gratuito disponível em nosso lote',
+                  icon: '🅿️',
+                },
+                {
+                  title: 'Acessível a Cadeirantes',
+                  description: 'Entrada e instalações totalmente acessíveis',
+                  icon: '♿',
+                },
+              ].map((item) => (
+                <AnimatedSection key={item.title} animation="slideInUp">
+                  <div className="bg-card border border-border rounded-lg p-6 text-center">
+                    <div className="text-4xl mb-4">{item.icon}</div>
+                    <h3 className="font-semibold text-foreground mb-2">{item.title}</h3>
+                    <p className="text-sm text-muted-foreground">{item.description}</p>
+                  </div>
+                </AnimatedSection>
+              ))}
+            </div>
+          </Container>
+        </section>
+
         {/* Directions CTA */}
         <section className="py-24">
           <Container>
@@ -195,34 +223,6 @@ export default function LocationPage() {
                 </div>
               </div>
             </AnimatedSection>
-          </Container>
-        </section>
-
-        {/* Parking & Accessibility */}
-        <section className="py-24 bg-secondary/5">
-          <Container>
-            <div className="flex flex-col gap-6 max-w-2xl mx-auto">
-              {[
-                {
-                  title: 'Estacionamento Gratuito',
-                  description: 'Amplo estacionamento gratuito disponível em nosso lote',
-                  icon: '🅿️',
-                },
-                {
-                  title: 'Acessível a Cadeirantes',
-                  description: 'Entrada e instalações totalmente acessíveis',
-                  icon: '♿',
-                },
-              ].map((item) => (
-                <AnimatedSection key={item.title} animation="slideInUp">
-                  <div className="bg-card border border-border rounded-lg p-6 text-center">
-                    <div className="text-4xl mb-4">{item.icon}</div>
-                    <h3 className="font-semibold text-foreground mb-2">{item.title}</h3>
-                    <p className="text-sm text-muted-foreground">{item.description}</p>
-                  </div>
-                </AnimatedSection>
-              ))}
-            </div>
           </Container>
         </section>
       </main>

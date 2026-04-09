@@ -26,17 +26,39 @@ export default function AccountPage() {
 
   const userBookings = mockBookings.filter(b => b.userId === 'user1');
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoggedIn(true);
-    setLoginData({ email: '', password: '' });
-  };
+  // HandleLogin - relacionado com a API de login
+  const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-  const handleRegister = (e: React.FormEvent) => {
-    e.preventDefault();
+  const res = await fetch("/api/login", {
+    method: "POST",
+    body: JSON.stringify(loginData),
+  });
+
+  if (res.ok) {
+    const user = await res.json();
     setIsLoggedIn(true);
-    setRegisterData({ name: '', email: '', password: '', phone: '' });
-  };
+    console.log("Usuário:", user);
+  } else {
+    alert("Email ou senha inválidos");
+  }
+};
+
+  // HandleRegister - relacionado com a API de registro
+  const handleRegister = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  const res = await fetch("/api/register", {
+    method: "POST",
+    body: JSON.stringify(registerData),
+  });
+
+  if (res.ok) {
+    setIsLoggedIn(true);
+  } else {
+    alert("Erro ao criar conta");
+  }
+};
 
   const handleLogout = () => {
     setIsLoggedIn(false);

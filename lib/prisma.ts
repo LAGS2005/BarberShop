@@ -1,12 +1,7 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
 
-// Aqui podemos passar o adapter diretamente
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: process.env.["postgresql://neondb_owner:npg_nik5tdL6Omcl@ep-weathered-bird-aixojobe-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"],
-    },
-  },
-})
+const globalForPrisma = global as any;
 
-export default prisma
+export const prisma = globalForPrisma.prisma || new PrismaClient();
+
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;

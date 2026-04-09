@@ -51,21 +51,6 @@ export default function BarbersPage() {
               ))}
             </div>
 
-            {/* About Section */}
-            <AnimatedSection animation="slideInUp" className="mt-24 max-w-2xl mx-auto bg-secondary/10 rounded-lg p-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6 text-center">
-                Artesanato Especializado
-              </h2>
-              <div className="space-y-4 text-muted-foreground text-center">
-                <p>
-                  Cada barbeiro em nosso time é um profissional dedicado que se orgulha de seu trabalho. Com especialidades que variam de degradês clássicos até designs modernos, arte de barba até barbear quente, temos a expertise para trazer sua visão à vida.
-                </p>
-                <p>
-                  Nossos barbeiros passam por treinamento contínuo para estar atualizado com as técnicas e tendências mais recentes. Seja você procurando por um corte clássico ou algo de ponta, nosso time está pronto para entregar resultados excepcionais.
-                </p>
-              </div>
-            </AnimatedSection>
-
             {/* CTA */}
             <AnimatedSection animation="scaleUp" className="mt-24 max-w-2xl mx-auto">
               <div className="bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 rounded-lg p-12 text-center space-y-4">

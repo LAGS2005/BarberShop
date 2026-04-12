@@ -1,27 +1,36 @@
-export const dynamic = "force-dynamic";
-
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import type { NextApiRequest, NextApiResponse } from "next";
+import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
-export async function POST(req: Request) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== "POST") return res.status(405).end();
+
   try {
-    const body = await req.json();
-    const { name, email, password, phone } = body;
+    const { name, email, password, phone } = req.body;
+
+    if (!name || !email || !password) return res.status(400).json({ error: "Missing fields" });
+
+    const existing = await prisma.user.findUnique({ where: { email }});
+    if (existing) return res.status(400).json({ error: "Email already in use" });
+
+    const hashed = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
       data: {
         name,
         email,
-        telefone: phone,
-        password: await bcrypt.hash(password, 10),
-        role: "client",
-      },
+        telefone: phone || null,
+        password: hashed,
+      }
     });
 
-    return NextResponse.json(user);
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Erro ao criar usuário" }, { status: 500 });
+    // remove password before returning
+    // @ts-ignore
+    delete user.password;
+
+    return res.status(201).json(user);
+  } catch (err) {
+    console.error("register error:", err);
+    return res.status(500).json({ error: "Server error" });
   }
 }

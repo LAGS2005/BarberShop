@@ -1,31 +1,27 @@
-export const dynamic = "force-dynamic";
-
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import type { NextApiRequest, NextApiResponse } from "next";
+import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
-export async function POST(req: Request) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== "POST") return res.status(405).end();
+
   try {
-    const { email, password } = await req.json();
+    const { email, password } = req.body;
+    if (!email || !password) return res.status(400).json({ error: "Missing fields" });
 
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
+    const user = await prisma.user.findUnique({ where: { email }});
+    if (!user) return res.status(404).json({ error: "User not found" });
 
-    if (!user) {
-      return NextResponse.json({ error: "Usuário não encontrado" }, { status: 404 });
-    }
+    const isValid = await bcrypt.compare(password, user.password);
+    if (!isValid) return res.status(401).json({ error: "Invalid credentials" });
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    // remove password before returning
+    // @ts-ignore
+    delete user.password;
 
-    if (!isPasswordValid) {
-      return NextResponse.json({ error: "Senha inválida" }, { status: 401 });
-    }
-
-    return NextResponse.json({ message: "Login OK", user });
-
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Erro no login" }, { status: 500 });
+    return res.status(200).json({ user });
+  } catch (err) {
+    console.error("login error:", err);
+    return res.status(500).json({ error: "Server error" });
   }
 }

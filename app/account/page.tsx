@@ -28,21 +28,26 @@ export default function AccountPage() {
 
   // HandleLogin - relacionado com a API de login
   const handleLogin = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const res = await fetch("/api/login", {
-    method: "POST",
-    body: JSON.stringify(loginData),
-  });
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loginData),
+    });
 
-  if (res.ok) {
-    const user = await res.json();
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "Erro no login");
+      return;
+    }
+
+    alert("Login realizado!");
     setIsLoggedIn(true);
-    console.log("Usuário:", user);
-  } else {
-    alert("Email ou senha inválidos");
-  }
-};
+  };
 
   // HandleRegister - relacionado com a API de registro
   const handleRegister = async (e: React.FormEvent) => {
@@ -56,12 +61,15 @@ export default function AccountPage() {
       body: JSON.stringify(registerData),
     });
 
-    if (res.ok) {
-      setIsLoggedIn(true);
-      setRegisterData({ name: '', email: '', password: '', phone: '' });
-    } else {
-      alert("Erro ao criar conta");
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "Erro ao registrar");
+      return;
     }
+
+    alert("Conta criada com sucesso!");
+    setIsLoggedIn(true);
   };
 
   const handleLogout = () => {

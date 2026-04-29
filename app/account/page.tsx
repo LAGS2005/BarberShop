@@ -30,46 +30,58 @@ export default function AccountPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(loginData),
-    });
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      alert(data.error || "Erro no login");
-      return;
+      if (!res.ok) {
+        alert(data.error || 'Erro ao fazer login');
+        return;
+      }
+
+      setIsLoggedIn(true);
+      setLoginData({ email: '', password: '' });
+
+    } catch (error) {
+      console.error(error);
+      alert('Erro no servidor');
     }
-
-    alert("Login realizado!");
-    setIsLoggedIn(true);
   };
 
   // HandleRegister - relacionado com a API de registro
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch("/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(registerData),
-    });
+    try {
+      if (!registerData.name || !registerData.email || !registerData.password) {
+        alert('Preencha todos os campos obrigatórios');
+        return;
+      }
 
-    const data = await res.json();
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(registerData),
+      });
 
-    if (!res.ok) {
-      alert(data.error || "Erro ao registrar");
-      return;
-    }
+      const data = await res.json();
 
-    alert("Conta criada com sucesso!");
-    setIsLoggedIn(true);
+      if (!res.ok) {
+        alert(data.error || 'Erro ao registrar');
+        return;
+      }
+
+      alert('Conta criada com sucesso!');
+      setIsLoggedIn(true);
   };
 
   const handleLogout = () => {

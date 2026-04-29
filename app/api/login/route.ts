@@ -1,27 +1,42 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import prisma from "@/lib/prisma";
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "POST") return res.status(405).end();
-
+export async function POST(req: Request) {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) return res.status(400).json({ error: "Missing fields" });
+    const { email, password } = await req.json();
 
-    const user = await prisma.user.findUnique({ where: { email }});
-    if (!user) return res.status(404).json({ error: "User not found" });
+    // 🔍 Buscar usuário
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
 
-    const isValid = await bcrypt.compare(password, user.password);
-    if (!isValid) return res.status(401).json({ error: "Invalid credentials" });
+    if (!user) {
+      return NextResponse.json(
+        { error: "Usuário não encontrado" },
+        { status: 404 }
+      );
+    }
 
-    // remove password before returning
-    // @ts-ignore
-    delete user.password;
+    // 🔐 Validar senha
+    const valid = await bcrypt.compare(password, user.password);
 
-    return res.status(200).json({ user });
-  } catch (err) {
-    console.error("login error:", err);
-    return res.status(500).json({ error: "Server error" });
+    if (!valid) {
+      return NextResponse.json(
+        { error: "Senha inválida" },
+        { status: 401 }
+      );
+    }
+
+    return NextResponse.json({
+      message: "Login OK",
+      user,
+    });
+
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Erro no login" },
+      { status: 500 }
+    );
   }
 }

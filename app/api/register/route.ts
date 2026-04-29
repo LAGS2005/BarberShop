@@ -1,36 +1,57 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import prisma from "@/lib/prisma";
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "POST") return res.status(405).end();
-
+export async function POST(req: Request) {
   try {
-    const { name, email, password, phone } = req.body;
+    const { name, email, password, phone } = await req.json();
 
-    if (!name || !email || !password) return res.status(400).json({ error: "Missing fields" });
+    // 🔍 1. Validar dados
+    if (!name || !email || !password) {
+      return NextResponse.json(
+        { error: "Campos obrigatórios faltando" },
+        { status: 400 }
+      );
+    }
 
-    const existing = await prisma.user.findUnique({ where: { email }});
-    if (existing) return res.status(400).json({ error: "Email already in use" });
+    // 🔍 2. Verificar se usuário já existe
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
 
-    const hashed = await bcrypt.hash(password, 10);
+    if (existingUser) {
+      return NextResponse.json(
+        { error: "Email já cadastrado" },
+        { status: 400 }
+      );
+    }
 
+    // 🔐 3. Criptografar senha
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // 💾 4. Salvar no banco
     const user = await prisma.user.create({
       data: {
         name,
         email,
-        telefone: phone || null,
-        password: hashed,
-      }
+        password: hashedPassword,
+        telefone: phone,
+        role: "client",
+      },
     });
 
-    // remove password before returning
-    // @ts-ignore
-    delete user.password;
+    // ✅ 5. Retornar sucesso
+    return NextResponse.json({
+      message: "Usuário criado com sucesso",
+      user,
+    });
 
-    return res.status(201).json(user);
-  } catch (err) {
-    console.error("register error:", err);
-    return res.status(500).json({ error: "Server error" });
+  } catch (error) {
+    console.error(error);
+
+    return NextResponse.json(
+      { error: "Erro no servidor" },
+      { status: 500 }
+    );
   }
 }
